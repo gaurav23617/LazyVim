@@ -11,7 +11,7 @@ local defaults = {
   -- colorscheme can be a string like `catppuccin` or a function that will load the colorscheme
   ---@type string|fun()
   colorscheme = function()
-    require("tokyonight").load()
+    require("catppuccin").load()
   end,
   -- load the default settings
   defaults = {
@@ -256,7 +256,7 @@ function M.setup(opts)
     msg = "Could not load your colorscheme",
     on_error = function(msg)
       LazyVim.error(msg)
-      vim.cmd.colorscheme("habamax")
+      vim.cmd.colorscheme("catppuccin")
     end,
   })
   LazyVim.track()
