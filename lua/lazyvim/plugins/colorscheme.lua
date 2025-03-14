@@ -1,6 +1,7 @@
 return {
   "catppuccin/nvim",
-  lazy = true,
+  lazy = false, -- Load immediately
+  priority = 500, -- Ensure it loads before other plugins
   name = "catppuccin",
   opts = {
     integrations = {
