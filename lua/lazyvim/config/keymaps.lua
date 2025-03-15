@@ -10,6 +10,8 @@ map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr =
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
+map("i", "<C-d>", "<ESC>:t.<CR>i", "Copy line down in insert mode")
+
 -- Move to window using the <ctrl> hjkl keys
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
@@ -21,6 +23,10 @@ map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
 map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
 map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+
+-- Increment/decrement numbers
+map("n", "<leader>+", "<C-a>", { desc = "Increment number" })
+map("n", "<leader>-", "<C-x>", { desc = "Decrement number" })
 
 -- Move Lines
 map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
@@ -76,6 +82,10 @@ map("i", ";", ";<c-g>u")
 
 -- save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+map("i", "jk", "<ESC>:w<CR>", { desc = "Exit insert mode and save file with jk" })
+map("n", "<leader>w", "<ESC>:w<CR>", { desc = "Save file" })
+map("n", "<leader>wq", "<ESC>:wq<CR>", { desc = "Save and exit file" })
+map("n", "<leader>wqa", "<ESC>:wqa<CR>", { desc = "Save file and exit nvim" })
 
 --keywordprg
 map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
@@ -88,11 +98,15 @@ map("v", ">", ">gv")
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
--- lazy
-map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
-
 -- new file
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
+
+-- packages
+map("n", "<leader>pl", "<cmd>Lazy<CR>", { desc = "Lazy" })
+map("n", "<leader>pi", "<cmd>Lazy install<CR>", { desc = "Lazy install" })
+map("n", "<leader>pu", "<cmd>Lazy update<CR>", { desc = "Lazy update" })
+map("n", "<leader>pm", "<cmd>Mason<CR>", { desc = "Mason" })
+map("n", "<leader>pmu", "<cmd>MasonUpdate<CR>", { desc = "Mason update" })
 
 -- location list
 map("n", "<leader>xl", function()
@@ -196,8 +210,12 @@ map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
 -- windows
 map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
+map("n", "<leader>sh", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
+map("n", "<leader>sv", "<C-W>v", { desc = "Split Window Right", remap = true })
+map("n", "<leader>se", "<C-W>=", { desc = "Make splits equal size", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
+map("n", "<leader>sx", "<C-W>c", { desc = "Delete Window", remap = true })
 Snacks.toggle.zoom():map("<leader>wm"):map("<leader>uZ")
 Snacks.toggle.zen():map("<leader>uz")
 
