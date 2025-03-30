@@ -32,4 +32,8 @@ return {
       })
     end,
   },
+  {
+    "dinhhuy258/git.nvim",
+    opts = {},
+  },
 }
