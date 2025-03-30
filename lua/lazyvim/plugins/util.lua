@@ -51,6 +51,10 @@ return {
     },
   },
 
+  -- library used by other plugins
+  { "nvim-lua/plenary.nvim", lazy = true },
+
+  -- This plugin allow you to move between Vim panes and tmux splits seamlessly.
   {
     "christoomey/vim-tmux-navigator",
     cmd = {
@@ -69,6 +73,4 @@ return {
       { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
     },
   },
-  -- library used by other plugins
-  { "nvim-lua/plenary.nvim", lazy = true },
 }
