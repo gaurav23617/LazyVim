@@ -2,7 +2,26 @@ return {
   desc = "Snacks File Explorer",
   recommended = true,
   "folke/snacks.nvim",
-  opts = { explorer = {} },
+  opts = {
+    explorer = {},
+    picker = {
+      sources = {
+        explorer = {
+          layout = { preset = "sidebar", preview = false, layout = { position = "right" } },
+          include = { "*" },
+          exclude = {
+            ".git",
+            "*.log",
+            "build",
+            "dist",
+            "__pycache__",
+            "*.tmp",
+            "*.swp",
+          },
+        },
+      },
+    },
+  },
   keys = {
     {
       "<leader>fe",
