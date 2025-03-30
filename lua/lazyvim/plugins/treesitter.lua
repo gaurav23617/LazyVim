@@ -24,6 +24,7 @@ return {
       -- no longer trigger the **nvim-treesitter** module to be loaded in time.
       -- Luckily, the only things that those plugins need are the custom queries, which we make available
       -- during startup.
+
       require("lazy.core.loader").add_to_rtp(plugin)
       require("nvim-treesitter.query_predicates")
     end,
@@ -33,8 +34,6 @@ return {
       { "<bs>", desc = "Decrement Selection", mode = "x" },
     },
     opts_extend = { "ensure_installed" },
-    ---@type TSConfig
-    ---@diagnostic disable-next-line: missing-fields
     opts = {
       highlight = { enable = true },
       indent = { enable = true },
@@ -76,14 +75,29 @@ return {
       textobjects = {
         move = {
           enable = true,
-          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
+          goto_next_start = {
+            ["]f"] = "@function.outer",
+            ["]c"] = "@class.outer",
+            ["]a"] = "@parameter.inner",
+          },
+          goto_next_end = {
+            ["]F"] = "@function.outer",
+            ["]C"] = "@class.outer",
+            ["]A"] = "@parameter.inner",
+          },
+          goto_previous_start = {
+            ["[f"] = "@function.outer",
+            ["[c"] = "@class.outer",
+            ["[a"] = "@parameter.inner",
+          },
+          goto_previous_end = {
+            ["[F"] = "@function.outer",
+            ["[C"] = "@class.outer",
+            ["[A"] = "@parameter.inner",
+          },
         },
       },
     },
-    ---@param opts TSConfig
     config = function(_, opts)
       if type(opts.ensure_installed) == "table" then
         opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
@@ -105,13 +119,13 @@ return {
 
       -- When in diff mode, we want to use the default
       -- vim text objects c & C instead of the treesitter ones.
-      local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
+      local move = require("nvim-treesitter.textobjects.move")
       local configs = require("nvim-treesitter.configs")
       for name, fn in pairs(move) do
         if name:find("goto") == 1 then
           move[name] = function(q, ...)
             if vim.wo.diff then
-              local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
+              local config = configs.get_module("textobjects.move")[name]
               for key, query in pairs(config or {}) do
                 if q == query and key:find("[%]%[][cC]") then
                   vim.cmd("normal! " .. key)
@@ -131,5 +145,38 @@ return {
     "windwp/nvim-ts-autotag",
     event = "LazyFile",
     opts = {},
+  },
+
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local rainbow_delimiters = require("rainbow-delimiters")
+      vim.g.rainbow_delimiters = {
+        strategy = {
+          [""] = rainbow_delimiters.strategy["global"],
+          vim = rainbow_delimiters.strategy["local"],
+        },
+        query = {
+          [""] = "rainbow-delimiters",
+          lua = "rainbow-blocks",
+        },
+        highlight = {
+          "RainbowDelimiterRed",
+          "RainbowDelimiterYellow",
+          "RainbowDelimiterBlue",
+          "RainbowDelimiterOrange",
+          "RainbowDelimiterGreen",
+          "RainbowDelimiterViolet",
+          "RainbowDelimiterCyan",
+        },
+      }
+    end,
+  },
+
+  {
+    "RRethy/nvim-treesitter-endwise",
+    event = "InsertEnter",
+    config = function() end,
   },
 }
