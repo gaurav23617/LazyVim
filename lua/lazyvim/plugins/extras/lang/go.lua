@@ -76,7 +76,7 @@ return {
   -- Ensure Go tools are installed
   {
     "williamboman/mason.nvim",
-    opts = { ensure_installed = { "goimports", "gofumpt" } },
+    opts = { ensure_installed = { "goimports", "gofumpt", "golangci-lint" } },
   },
   {
     "nvimtools/none-ls.nvim",
@@ -121,6 +121,28 @@ return {
     },
   },
   {
+    "mfussenegger/nvim-lint",
+    opts = function(_, opts)
+      local function add_linters(tbl)
+        for ft, linters in pairs(tbl) do
+          if opts.linters_by_ft[ft] == nil then
+            opts.linters_by_ft[ft] = linters
+          else
+            vim.list_extend(opts.linters_by_ft[ft], linters)
+          end
+        end
+      end
+
+      add_linters({
+        ["go"] = { "golangcilint" },
+        ["gomod"] = { "golangcilint" },
+        ["gowork"] = { "golangcilint" },
+      })
+
+      return opts
+    end,
+  },
+  {
     "nvim-neotest/neotest",
     optional = true,
     dependencies = {
@@ -148,5 +170,18 @@ return {
         gotmpl = { glyph = "󰟓", hl = "MiniIconsGrey" },
       },
     },
+  },
+  {
+    "ray-x/go.nvim",
+    dependencies = {
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {},
+    ft = { "go", "gomod" },
+    build = function()
+      require("go.install").update_all_sync()
+    end,
   },
 }
