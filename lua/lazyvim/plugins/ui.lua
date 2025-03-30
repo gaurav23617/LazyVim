@@ -75,7 +75,6 @@ return {
       end
     end,
     opts = function()
-      -- PERF: we don't need this lualine require madness 🤷
       local lualine_require = require("lualine_require")
       lualine_require.require = require
 
@@ -87,10 +86,12 @@ return {
         options = {
           theme = "auto",
           globalstatus = vim.o.laststatus == 3,
-          disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
+          disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
         },
         sections = {
-          lualine_a = { "mode" },
+          lualine_a = {
+            { "mode", icon = " " },
+          },
           lualine_b = { "branch" },
 
           lualine_c = {
@@ -106,65 +107,50 @@ return {
             },
             { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
             { LazyVim.lualine.pretty_path() },
+            { "pipeline", icon = "" },
           },
           lualine_x = {
             Snacks.profiler.status(),
-            -- stylua: ignore
-            {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              color = function() return { fg = Snacks.util.color("Statement") } end,
-            },
-            -- stylua: ignore
-            {
-              function() return require("noice").api.status.mode.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-              color = function() return { fg = Snacks.util.color("Constant") } end,
-            },
-            -- stylua: ignore
-            {
-              function() return "  " .. require("dap").status() end,
-              cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-              color = function() return { fg = Snacks.util.color("Debug") } end,
-            },
-            -- stylua: ignore
-            {
-              require("lazy.status").updates,
-              cond = require("lazy.status").has_updates,
-              color = function() return { fg = Snacks.util.color("Special") } end,
-            },
-            {
-              "diff",
-              symbols = {
-                added = icons.git.added,
-                modified = icons.git.modified,
-                removed = icons.git.removed,
-              },
-              source = function()
-                local gitsigns = vim.b.gitsigns_status_dict
-                if gitsigns then
-                  return {
-                    added = gitsigns.added,
-                    modified = gitsigns.changed,
-                    removed = gitsigns.removed,
-                  }
-                end
-              end,
-            },
+          -- stylua: ignore
+          {
+            function() return require("noice").api.status.command.get() end,
+            cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+            color = function() return { fg = Snacks.util.color("Statement") } end,
           },
-          lualine_y = {
-            { "progress", separator = " ", padding = { left = 1, right = 0 } },
-            { "location", padding = { left = 0, right = 1 } },
+          -- stylua: ignore
+          {
+            function() return require("noice").api.status.mode.get() end,
+            cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
+            color = function() return { fg = Snacks.util.color("Constant") } end,
           },
-          lualine_z = {
-            function()
-              return " " .. os.date("%R")
-            end,
+          -- stylua: ignore
+          {
+            require("lazy.status").updates,
+            cond = require("lazy.status").has_updates,
+            color = { fg = "#ff9e64" },
           },
+            { "encoding" },
+            { "fileformat" },
+            { "filetype" },
+          },
+          lualine_y = { "progress" },
+          lualine_z = { "location" },
         },
         extensions = { "neo-tree", "lazy", "fzf" },
       }
 
+      -- Add Copilot status
+      table.insert(
+        opts.sections.lualine_x,
+        3,
+        LazyVim.lualine.status(LazyVim.config.icons.kinds.Copilot, function()
+          local clients = package.loaded["copilot"] and LazyVim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
+          if #clients > 0 then
+            local status = require("copilot.api").status.data.status
+            return (status == "InProgress" and "pending") or (status == "Warning" and "error") or "ok"
+          end
+        end)
+      )
       -- do not add trouble symbols if aerial is enabled
       -- And allow it to be overriden for some buffer types (see autocmds)
       if vim.g.trouble_lualine and LazyVim.has("trouble.nvim") then
@@ -188,7 +174,6 @@ return {
       return opts
     end,
   },
-
   -- Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu.
   {
     "folke/noice.nvim",
