@@ -7,16 +7,94 @@ end
 local lsp = vim.g.lazyvim_php_lsp or "phpactor"
 
 return {
+
+  -- Recommended trigger for LazyVim extras
   recommended = {
-    ft = "php",
+    ft = { "php", "blade" },
     root = { "composer.json", ".phpactor.json", ".phpactor.yml" },
+  },
+
+  -- Blade syntax highlighting & navigation
+  { "EmranMR/tree-sitter-blade", ft = "blade" },
+
+  {
+    "ricardoramirezr/blade-nav.nvim",
+    ft = { "blade", "blade.php" },
   },
 
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "php" } },
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, {
+        "php",
+        "php_only",
+        "phpdoc",
+        "sql",
+        "blade",
+      })
+
+      opts.highlight = opts.highlight or {}
+      opts.highlight.additional_vim_regex_highlighting = false
+
+      opts.incremental_selection = opts.incremental_selection
+        or {
+          enable = true,
+          keymaps = {
+            init_selection = "gnn",
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+          },
+        }
+
+      opts.inject = { enable = true }
+
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+      parser_config.blade = {
+        install_info = {
+          url = "https://github.com/EmranMR/tree-sitter-blade",
+          files = { "src/parser.c" },
+          branch = "main",
+        },
+        filetype = "blade",
+      }
+
+      local highlight_query = [[
+        ((directive) @keyword)
+        ((directive_start) @keyword)
+        ((directive_end) @keyword)
+        ((bracket_start) @punctuation.bracket)
+        ((bracket_end) @punctuation.bracket)
+        ((comment) @comment @spell)
+      ]]
+
+      local ok_query, ts_query = pcall(require, "vim.treesitter.query")
+      if ok_query and ts_query.set then
+        ts_query.set("blade", "highlights", highlight_query)
+      elseif vim.treesitter.query.set then
+        vim.treesitter.query.set("blade", "highlights", highlight_query)
+      end
+
+      return opts
+    end,
   },
 
+  -- Blade filetype detection
+  {
+    "nvim-lua/plenary.nvim",
+    lazy = false,
+    config = function()
+      vim.api.nvim_create_augroup("BladeFiltypeRelated", { clear = true })
+      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = "*.blade.php",
+        command = "set filetype=blade",
+        group = "BladeFiltypeRelated",
+      })
+    end,
+  },
+
+  -- PHP LSP config
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -34,6 +112,7 @@ return {
     },
   },
 
+  -- Tools to install via Mason
   {
     "williamboman/mason.nvim",
     opts = {
@@ -43,6 +122,22 @@ return {
       },
     },
   },
+
+  -- Optional PHP Unit Testing
+  {
+    "nvim-neotest/neotest",
+    optional = true,
+    dependencies = {
+      "olimorris/neotest-phpunit",
+    },
+    opts = {
+      adapters = {
+        ["neotest-phpunit"] = {},
+      },
+    },
+  },
+
+  -- Optional PHP Debugger
   {
     "mfussenegger/nvim-dap",
     optional = true,
@@ -56,6 +151,8 @@ return {
       }
     end,
   },
+
+  -- Optional: PHP linters & formatters via null-ls
   {
     "nvimtools/none-ls.nvim",
     optional = true,
@@ -66,6 +163,8 @@ return {
       table.insert(opts.sources, nls.builtins.diagnostics.phpcs)
     end,
   },
+
+  -- Optional: PHP linter using `nvim-lint`
   {
     "mfussenegger/nvim-lint",
     optional = true,
@@ -75,6 +174,8 @@ return {
       },
     },
   },
+
+  -- Optional: PHP formatter using conform.nvim
   {
     "stevearc/conform.nvim",
     optional = true,
