@@ -72,4 +72,11 @@ return {
       end
     end,
   },
+  {
+    "MaximilianLloyd/tw-values.nvim",
+    keys = {
+      { "<leader>cT", "<cmd>TWValues<cr>", desc = "Tailwind CSS values" },
+    },
+    opts = {},
+  },
 }
