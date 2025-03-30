@@ -15,12 +15,12 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 })
 
 -- Highlight on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-  group = augroup("highlight_yank"),
-  callback = function()
-    (vim.hl or vim.highlight).on_yank()
-  end,
-})
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+--   group = augroup("highlight_yank"),
+--   callback = function()
+--     (vim.hl or vim.highlight).on_yank()
+--   end,
+-- })
 
 -- resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
@@ -122,5 +122,30 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     end
     local file = vim.uv.fs_realpath(event.match) or event.match
     vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+  end,
+})
+
+-- Disable eslint on node_modules
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  group = vim.api.nvim_create_augroup("DisableEslintOnNodeModules", { clear = true }),
+  pattern = { "**/node_modules/**", "node_modules", "/node_modules/*" },
+  callback = function()
+    vim.diagnostic.enabled(false)
+  end,
+})
+
+-- Delete number column on terminals
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.cmd("setlocal listchars= nonumber norelativenumber")
+    vim.cmd("setlocal nospell")
+  end,
+})
+
+-- Disable next line comments
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    vim.cmd("set formatoptions-=cro")
+    vim.cmd("setlocal formatoptions-=cro")
   end,
 })
