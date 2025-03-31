@@ -219,6 +219,11 @@ return {
       },
     },
     keys = {
+      {
+        "<leader>xd",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<CR>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
       { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
       { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
       { "<leader>cs", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
