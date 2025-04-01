@@ -340,6 +340,7 @@ return {
     opts = {
       ensure_installed = {
         "emmet-ls",
+        "emmet-language-server",
         "json-lsp",
       },
     },
