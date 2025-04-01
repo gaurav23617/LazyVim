@@ -47,7 +47,7 @@ return {
     opts = function(_, opts)
       table.insert(
         opts.sections.lualine_x,
-        2,
+        3,
         LazyVim.lualine.status(LazyVim.config.icons.kinds.Copilot, function()
           local clients = package.loaded["copilot"] and LazyVim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
           if #clients > 0 then
