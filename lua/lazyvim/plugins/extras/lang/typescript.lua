@@ -41,17 +41,6 @@ return {
           settings = {
             complete_function_calls = true,
             vtsls = {
-              handlers = {
-                ["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
-                  require("ts-error-translator").translate_diagnostics(err, result, ctx, config)
-                  vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
-                end,
-              },
-              init_options = {
-                preferences = {
-                  disableSuggestions = true,
-                },
-              },
               enableMoveToFileCodeAction = true,
               autoUseWorkspaceTsdk = true,
               experimental = {
@@ -340,7 +329,6 @@ return {
     opts = {
       ensure_installed = {
         "emmet-ls",
-        "emmet-language-server",
         "json-lsp",
       },
     },
