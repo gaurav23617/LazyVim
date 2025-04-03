@@ -92,12 +92,7 @@ return {
         ["scss"] = { stylelint },
         ["less"] = { stylelint },
         ["sugarss"] = { stylelint },
-        ["vue"] = { stylelint },
         ["wxss"] = { stylelint },
-        ["javascript"] = { stylelint },
-        ["javascriptreact"] = { stylelint },
-        ["typescript"] = { stylelint },
-        ["typescriptreact"] = { stylelint },
       })
       return opts
     end,
