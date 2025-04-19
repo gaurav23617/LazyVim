@@ -16,6 +16,8 @@ return {
     })
   end,
 
+  { import = "lazyvim.plugins.extras.util.live-preview" },
+
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
