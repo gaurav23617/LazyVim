@@ -16,8 +16,12 @@ return {
       picker = "",
     },
     keys = {
-      { "<leader>lv", "<cmd>LivePreview start<cr>" },
-      { "<leader>lx", "<cmd>LivePreview stop<cr>" },
+      {
+        "<leader>lv",
+        "<cmd>LivePreview start<cr>",
+        desc = "Live Preview Start",
+      },
+      { "<leader>lx", "<cmd>LivePreview stop<cr>", desc = "Live Preview Stop" },
     },
   },
 }
