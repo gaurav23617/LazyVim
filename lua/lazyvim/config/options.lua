@@ -9,12 +9,6 @@ vim.g.autoformat = true
 -- Set to `false` to globally disable all snacks animations
 vim.g.snacks_animate = true
 
--- LazyVim picker to use.
--- Can be one of: telescope, fzf
--- Leave it to "auto" to automatically use the picker
--- enabled with `:LazyExtras`
-vim.g.lazyvim_picker = "auto"
-
 -- LazyVim completion engine to use.
 -- Can be one of: nvim-cmp, blink.cmp
 -- Leave it to "auto" to automatically use the completion engine

@@ -224,7 +224,7 @@ function M.setup(opts)
           end
         end
       end
-      local lazyvim_plugins = find("^lazyvim%.plugins$")
+      local lazyvim_plugins = find("^lazyvim%.plugins$", "^lazyvim%.plugins%.")
       local extras = find("^lazyvim%.plugins%.extras%.", true) or lazyvim_plugins
       local plugins = find("^plugins$") or math.huge
       if lazyvim_plugins ~= 1 or extras > plugins then
@@ -348,8 +348,6 @@ function M.get_defaults()
   local checks = {
     picker = {
       { name = "snacks", extra = "editor.snacks_picker" },
-      { name = "fzf", extra = "editor.fzf" },
-      { name = "telescope", extra = "editor.telescope" },
     },
     cmp = {
       { name = "blink.cmp", extra = "coding.blink", enabled = vim.fn.has("nvim-0.10") == 1 },
@@ -363,7 +361,6 @@ function M.get_defaults()
 
   -- existing installs keep their defaults
   if (LazyVim.config.json.data.install_version or 7) < 8 then
-    table.insert(checks.picker, 1, table.remove(checks.picker, 2))
     table.insert(checks.explorer, 1, table.remove(checks.explorer, 2))
   end
 

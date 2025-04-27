@@ -8,16 +8,7 @@ return {
       sources = {
         explorer = {
           layout = { preset = "sidebar", preview = false, layout = { position = "right" } },
-          include = { "*" },
-          exclude = {
-            ".git",
-            "*.log",
-            "build",
-            "dist",
-            "__pycache__",
-            "*.tmp",
-            "*.swp",
-          },
+          files = { hidden = true },
         },
       },
     },
