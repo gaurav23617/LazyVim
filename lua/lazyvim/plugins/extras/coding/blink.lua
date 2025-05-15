@@ -51,7 +51,7 @@ return {
         nerd_font_variant = "mono",
       },
       fuzzy = {
-        implementation = "prefer_rust",
+        implementation = "lua",
         use_frecency = true,
         use_unsafe_no_lock = false,
         sorts = {
