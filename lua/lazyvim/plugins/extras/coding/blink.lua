@@ -50,17 +50,17 @@ return {
         -- adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
       },
-      fuzzy = {
-        implementation = 'rust',
-        use_frecency = true,
-        use_unsafe_no_lock = false,
-        sorts = {
-          -- (optionally) always prioritize exact matches
-          'exact',
-          'score',
-          'sort_text',
-        },
-      },
+      -- fuzzy = {
+      --   implementation = 'rust',
+      --   use_frecency = true,
+      --   use_unsafe_no_lock = false,
+      --   sorts = {
+      --     -- (optionally) always prioritize exact matches
+      --     'exact',
+      --     'score',
+      --     'sort_text',
+      --   },
+      -- },
       completion = {
 
         list = {
