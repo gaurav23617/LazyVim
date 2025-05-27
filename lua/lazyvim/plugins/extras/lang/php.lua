@@ -114,7 +114,7 @@ return {
 
   -- Tools to install via Mason
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
         "phpcs",

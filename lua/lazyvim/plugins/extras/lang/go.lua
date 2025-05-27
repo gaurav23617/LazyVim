@@ -75,15 +75,15 @@ return {
   },
   -- Ensure Go tools are installed
   {
-    "williamboman/mason.nvim",
-    opts = { ensure_installed = { "goimports", "gofumpt", "golangci-lint" } },
+    "mason-org/mason.nvim",
+    opts = { ensure_installed = { "goimports", "gofumpt" } },
   },
   {
     "nvimtools/none-ls.nvim",
     optional = true,
     dependencies = {
       {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         opts = { ensure_installed = { "gomodifytags", "impl" } },
       },
     },
@@ -111,7 +111,7 @@ return {
     optional = true,
     dependencies = {
       {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         opts = { ensure_installed = { "delve" } },
       },
       {
